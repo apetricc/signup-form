@@ -1,0 +1,53 @@
+made our boiler plate react app (in the current dir.) with: 
+npx create-react-app signup-form
+
+that gives us the basic files, App.js is rendered by index.js
+App.test.js is the tester file for App.js 
+--that's the standard naming convention for test files; 
+
+if we look in App.test.js, we can see that it's already using some testing libraries by default
+and has already imported them for us, courtesy of "npx create-react-app": 
+import { render, screen } from '@testing-library/react';
+
+and we can see in package.json: 
+"dependencies": {
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    [removed for brevity]...
+    ...
+  },
+
+--In fact, we can already run a testing command since there is a test in App.test.js: 
+npm run test
+
+which looks at our package.json file "scripts" property: 
+"scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  }, ...
+
+I think this should work, but I'm getting errors, maybe need to restart vsCode.
+stack overflow told me to install specific version of jest typeahead and that fixed it:
+npm i -D --exact jest-watch-typeahead@0.6.5
+
+then I can run: 
+npm run test
+
+There was one test in there by default, and that test passes; 
+________________________________________________________
+
+@24.26 -- RTL philosophy
+________________________________________________________
+
+
+
+
+
+
+
+
+
+
