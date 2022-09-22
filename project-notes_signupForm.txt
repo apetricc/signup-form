@@ -42,6 +42,133 @@ ________________________________________________________
 @24.26 -- RTL philosophy
 ________________________________________________________
 
+always test how the software is meant to be used, 
+not how it's implemented; 
+
+so we'll start writing some tests, starting with our assumptions of 
+how the app should work for the users: 
+
+--> we expect the user to be able to type (input) into the text fields.
+
+
+@28.30ish  
+
+What's in a test? We have 'test' keyword/method with 2 params: 
+1. a string describing the test -- this is easy, describe the test; 
+2. a callback function.
+    the callback function will contain all the logic of our test/tests, and usually these 3 steps
+    for testing react stuff:
+    1. render a component, and we're passing in App from our App component...from our application.
+        This will render only that component and its children into our 'virtual DOM' (no parents)
+
+
+test('describe what the test is testing', () => {
+    a callback function with these 3 steps: 
+    1. render something to virtual DOM so we can test it
+});
+
+the actual test and some inline notes: 
+test('renders learn react link', () => {
+    //1. rendering the component we want to test
+  render(<App />);
+
+  //2. 'finding the elements'; Find a specific element within the component we're testing; 
+  // we're using "screen.getByText()" with a regular expression inside --> /learn react/i
+  const linkElement = screen.getByText(/learn react/i);
+
+  //3. 'An assertion' PASS/FAIL; We're expecting this anchor tag to be in the document 
+  expect(linkElement).toBeInTheDocument();
+});
+
+@33 min
+we can run our tests again with "npm run test"
+- now we'll get 2 tests passing b/c we added the other empty test; 
+- it will only fail if an error gets thrown, so an empty test will always pass; 
+
+@33.38  if we comment out the anchor tag our test will fail; (it's the "<a> </a>" tag)
+note that the error we get sort of hints at you what element is missing, the anchor tag in this case; 
+
+@34.54 - make our 'first test'
+We wanted to test if users can type into the text input box, but we will start even easier
+with just testing if the box is empty in the first place; 
+
+@38  https://testing-library.com/docs/queries/about/
+--> looking at RTL docs, we want to use one of the query calls to query a single element; 
+
+@38.20 looking at table describing the different single element query options; 
+__________
+getBy() --> throws error if it doesn't find the element, if it finds 1 element it returns it,
+if it finds multiple--error, cannot use async/await
+__________
+queryBy() -->  if we want to test for the lack of an element, we'd want to use 'queryBy()' instead of 
+getBy() b/c queryBy() returns 'null' if it gets 0 matches. Otherwise it is the same as getBy()
+__________
+findBy() --> just like getBy(), except we can use it with elements that render asynchronously (that use async/await)
+
+-----------------
+@41min:
+in the docs, it says "getBy..." 
+so what does the "..." mean??
+It means we can put different stuff there, which are listed in "Queries Accessible to Everyone" section;
+
+These are all the things we can use with either
+getBy, queryBy, or findBy
+
+so it says "getByRole" but we can also "queryByRole" or "findByRole" for example; 
+the list: 
+1. getByRole            ||  queryByRole             ||  findByRole
+2. getByLabelText       ||  queryByLabelText        ||  findByLabelText
+3. getByPlaceholderText ||  queryByPlaceholderText  ||  findByPlaceholderText
+4. getByText            ||  queryByText             ||  findByText
+5. getByDisplayValue    ||  queryByDisplayValue     ||  findByDisplayValue
+6. getByAltText         ||  queryByAltText          ||  findByAltText
+7. getByTitle           ||  queryByTitle            ||  findByTitle
+8. getByTestId          ||  queryByTestId           ||  findByTestId
+
+so which one do we use??!  First of all, note that these are in order of priority, 
+so we should use 'Role' first, then 'LabelText', and so on; 
+It says 'TestId' is the 'last resort', but we are using that a lot in production for whatever reason; 
+
+--------
+back to our first test: 
+
+test('inputs should be empty intially', () => {
+  //render the component we want to test in our 'virtual DOM'
+  render(<App />)
+  // next step, find the input elements we want to test (query for them)--how do we do that ..?  see the RTL 'query' docs
+  const emailInputElement = screen.getByRole("textbox");
+});
+
+This test will now fail b/c we don't have anything being rendered in our App.js that has a textbox,
+∴  there's no way it can find an element with a role of "textbox"
+If we look at the docs for "getBy()", we see that it throws error if it doesn't find the thing;
+If an error gets thrown in a test block, that causes the test to fail.
+
+Now we go for the assertion.  We expect the input element to be completely empty; 
+expect(emailInputElement.value).toBe("");
+
+@47.58  -- we're following TDD principles, so wrote our test first, 
+now we want to write the code that will make our test pass;
+
+for styling purposes only (nothing to do with testing), 
+we are going to use 'Bootstrap' by adding this to our public/index.html: 
+<!-- CSS only -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+
+now we can add the elements in App.js to make our test pass;
+
+@51.10 -- our tests now pass with the minimum amount of code needed to pass the tests we wrote.
+I don't quite understand the relationship of our test to the stuff in our App.js yet;
+is the test simply looking for any element that can hold text anywhere on the screen with this?: 
+const emailInputElement = screen.getByRole("textbox");
+
+
+
+
+
+
+
+
 
 
 
