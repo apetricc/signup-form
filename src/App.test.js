@@ -23,6 +23,9 @@ test('inputs should be empty intially', () => {
   const emailInputElement = screen.getByRole("textbox");
   // expecting it to be empty test/assertion
   expect(emailInputElement.value).toBe("");
+  
+
+
 
 });
 

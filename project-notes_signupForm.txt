@@ -162,8 +162,30 @@ I don't quite understand the relationship of our test to the stuff in our App.js
 is the test simply looking for any element that can hold text anywhere on the screen with this?: 
 const emailInputElement = screen.getByRole("textbox");
 
+after some digging I can see that we have a few things going on here; 
+when we say `htmlFor="email"` that is a thing that automatcially knows to look for an email format string; 
+We also have `<input type="email" ...` which is a similar sort of thing for email validation;
+That means it knows it should be a text input, and there should be an "@" symbol etc.
 
+@51.30-...
+He mentions that if we wanted to make this a password input field, we couldn't just change the input type to:
+ `input="password"`
+and expect our test to pass, b/c 'password' input type doesn't count as a 'textbox' apparently; 
+furthermore, 'password' (input type) has no implicit role;  
+∴ we have to give any password field we want to test a label and an id like: 
+<label for="password-field">Password</label>
+<input id="password-field" name="password" type="password" />
 
+clearly there's a lot to learn about html/JS and labels/input boxes 
+
+Why our first test worked--
+we had the 'label' --> `htmlFor="email"` 
+we had the 'id' within the 'input' --> `<input ... id="email" .../>`
+
+So to test the password field we need another div that has a
+password input type & a label, & then we can get that input type by its label...?
+
+@54.42
 
 
 
