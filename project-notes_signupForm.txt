@@ -200,6 +200,37 @@ id="password"
 name="password"
 
 and then our tests will pass now that it can find somehting labeled as /password/i
+@57.20
+set up test and code for 'confirm password' input field; 
+
+copy the 'password' div and update to 'Confirm Password', leave the input 'type' as password, 
+but update the htmlFor, id, and name to 'confirm-password'
+
+The test now fails with this error: 
+"TestingLibraryElementError: Found multiple elements with the text of: /password/i"
+
+So the regex is the issue I think;
+ALso, when using 'getBy..' testing method, if it finds multiple elements that match, it throws an error, 
+so this is the correct behavior;
+We can update the first on to look for the string "Password" explicitly, and this would solve our issue;
+
+@1.00.50 moving on to more complicated tests now that we've got our tests to confirm empty starting state;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   ∴   ↓   →   ←   ↔    ▲    ▼    ►    ◄ 
 

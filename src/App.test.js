@@ -23,13 +23,14 @@ test('inputs should be empty intially', () => {
   const emailInputElement = screen.getByRole("textbox");
   
   //for password using a regex that looks for 'password' in some form within the element: 
-  const passwordInputElement = screen.getByLabelText(/password/i);
-
+  const passwordInputElement = screen.getByLabelText("Password");
+  //for 'confirm password' input field, another regex used here
+  const confirmPasswordInputElement = screen.getByLabelText(/confirm password/i);
   
   // expecting it to be empty test/assertion for all the input fields (initially anyway): 
   expect(emailInputElement.value).toBe("");
   expect(passwordInputElement.value).toBe("");
-
+  expect(confirmPasswordInputElement.value).toBe("");
 
 
 });
