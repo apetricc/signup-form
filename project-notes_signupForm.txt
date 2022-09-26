@@ -185,14 +185,23 @@ we had the 'id' within the 'input' --> `<input ... id="email" .../>`
 So to test the password field we need another div that has a
 password input type & a label, & then we can get that input type by its label...?
 
-@54.42
+@55
+writing test for password field, utilize regex for this; 
+then we run the usual: 
+npm run test
 
+of course it will fail b/c we haven't added a field for password yet, 
+so we'll go over to our App.js file and copy the div we created already
+as a boilerplate 
+Then we update the "htmlFor" --> htmlFor="password"
+and the input property values: 
+type="password"
+id="password"
+name="password"
 
+and then our tests will pass now that it can find somehting labeled as /password/i
 
-
-
-
-
+  ∴   ↓   →   ←   ↔    ▲    ▼    ►    ◄ 
 
 
 

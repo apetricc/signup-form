@@ -21,9 +21,14 @@ test('inputs should be empty intially', () => {
   // next step, find the input elements we want to test-- query for them
   // how do we do that ..?  see the RTL 'query' docs
   const emailInputElement = screen.getByRole("textbox");
-  // expecting it to be empty test/assertion
-  expect(emailInputElement.value).toBe("");
   
+  //for password using a regex that looks for 'password' in some form within the element: 
+  const passwordInputElement = screen.getByLabelText(/password/i);
+
+  
+  // expecting it to be empty test/assertion for all the input fields (initially anyway): 
+  expect(emailInputElement.value).toBe("");
+  expect(passwordInputElement.value).toBe("");
 
 
 
