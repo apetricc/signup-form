@@ -216,6 +216,9 @@ We can update the first on to look for the string "Password" explicitly, and thi
 
 @1.00.50 moving on to more complicated tests now that we've got our tests to confirm empty starting state;
 
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+tuesday morning: 
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 next we want to test that we can give input for the text input fields that we have now; 
 see what we have with: 
 npm run start             and see what we have at localhost:3000
@@ -239,7 +242,143 @@ going to be our state ? (not sure I understand this part)
 update a React 'state' when receiving input from user basically, I think.
 
 When we update a specific value, we also update the state. Easy. 
-@1.06.24-- test failing with static state of ""
+@1.06.24-- test failing with static state of value="" in the email input div
+Then we remove that value="" 
+@1.06.33 the first 'do it yourself' section--basically just write the same sort of tests 
+for the other two fields: 'password' & 'confirm password'
+and I think I got them  👍  
+1.07.38 -- his explanation of how to add these tests; 
+@1.11 -- start working on some more complicated tests now--error handling on the input fields; 
+adding check for the email error message on invalid input using a matcher from Jest, see this page for other matchers: 
+https://learntechsystems.com/assertions-in-react-testing-library/
+they are: 
+toBeDisabled, toBeEnabled, toBeEmpty, toBeEmptyDOMElement, toBeInTheDocument, toBeInvalid, toBeRequired, toBeValid, 
+toBeVisible, toContainElement, toContainHTML, toHaveAttribute, toHaveClass, toHaveFocus, toHaveFormValues, toHaveStyle, 
+toHaveTextContent, toHaveValue, toHaveDisplayValue, toBeChecked, toBePartiallyChecked, toHaveDescription
+
+WE could also do a test to confirm that the invalid email error isn't present initially, and only after we click 'Submit' could it appear;
+
+added test to confirm we don't have the error message initally; 
+WE can't use 'getBy' here, b/c if we don't find what we try to 'getBy' initially, it will throw error;
+we need to use "queryBy" for this sort of thing;  
+
+@1.18.15  cleaned up our tests related to the bad email input error message, time to write implementation; 
+We need to get the state of the user input and use it in our App;
+Best way to do this is with "useState"
+
+We added some properties for a useState object inside 'signupInput, setSignInput' & add:
+
+ import { useState } from "react"
+
+We are doing this to use 2 way binding, so that we can use whatever input goes into the divs in the DOM, 
+and then whatever logic we apply also goes back to the DOM; 
+
+Whatever the 'state' is inside our object, will be the value of the 'input' div, 
+and anytime we update the 'input' we will also update the 'state'
+
+First we'll do the 1 way binding which will be "whatever the input div gets, the `state` gets"
+we add to our div --> value={signupInput.email}
+-what if we did that (& forgot to do the 2-way binding using 'onChange')? 
+our test for 'should be able to type in an email' will fail;
+@1.21.44
+our test will always fail at this point b/c we assigned a static value of "" to the "email" property of the 'useState'
+∴ we're not going to be able to change the value, so to handle changing the value, we need to use an "onChange" handler; 
+and on the proverbial 'change', we will call a function --> "handleChange"  (this is still within the email div element, not the method definition though ofc)
+onChange={handleChange}
+@1.22.18 defining handleChange function; 
+We will spread the input fields inside the setSignInput{}  (AKA : "setSignInput object")
+EXCEPT-- we want to set the email to whatever the input is from our event 'e'
+But b/c we want to reuse this function for our other fields, AND we have given 
+a unique "name" property to each of the input fields in our divs / DOM
+we can reference that in the object, with '[e.target.name]'  (I am not sure why in brackets)
+and the value we assign will come from 'e.target.value'  no brackets this time...for some reason.
+
+@1.23.38 -- added 2 way binding so input into email field test is passing now; 
+-> since are just referencing 'name' in our 'handleChange' function, we can basically copy paste the 
+'value' part into our other two input fields, updating which property of "signupInput" we use to hold our state/input
+remember that we declared it with 3 props--email, password, & confirmPassword which were all intialized as ""
+
+            value={signupInput.password}
+            onChange={handleChange}
+
+We also have to update the 'name' property for the confirm-password div to 'confirmPassword' so it matches
+the prop inside of 'signupInput'.  I tried changing signupInput to use 'confirm-password', but it won't accept 
+a dash in the property name, only camelCase or snake_case
+∴ it's easier to just update the 'name' property to 'confirmPassword' for that div section so they match;
+
+Now we have 4/5 tests passing; 👍
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@1.24.27  validate the email when we click the 'submit' button; 
+add className to our button -- btn btn-primary
+
+so we're updating our button element from: 
+<button type="submit">Submit</button>  
+to:
+<button type="submit" className='btn btn-primary' onclick={handleClick}>Submit</button>
+
+
+defining our 'handleClick' function-- this is where we will want to validate all our inputs...
+ie. user has entered their stuff into the input fields, and they click the 'submit' button.
+
+@1.25 defining 'handleClick'
+He says the 1st thing we want to do is 'get the target & prevent the default behavior'... ?
+If we had a link, the default behvior would be to follow the link--we can suppress this & other 
+default behaviors using this 'preventDefault()' method invocation; (not sure why we want that here though) 
+from w3 schools (https://www.w3schools.com/jsref/event_preventdefault.asp): 
+Clicking on a "Submit" button, prevent it from submitting a form
+
+@1.27ish:
+now we want to get the email, & validate that it's a 'real' email (follows the standard format for an email anyway)
+We'll use a regex to accomplish this maybe? 
+google search: 'stackoverflow best way to validate an email in javascript'
+find some interesting regex solutions; 
+But this would be sort of reinventing the wheel... 
+google search: 'validator javascript'  --> nope;
+google search: 'validator npm' --> bingo
+
+--note: it doesn't matter how we implement it, or if we use a library or regex; what matters is 
+the experience for the user and if it works; 
+
+the library is called 'validator' (https://www.npmjs.com/package/validator)
+the docs say we can import like this in javascript---> var validator = require('validator');
+but what we can do is this: 
+npm install validator
+
+we also have to add an import to our App.js file additionally... like this: 
+import validator from 'validator';
+
+Now that we have the validator library at our disposal, we can use it for some control flow--
+test the input if it's a valid email inside our handleClick function
+-->if it's not a valid email we want to throw an error.
+What is the error?  --> we can create another piece of 'state' here for the error; 
+
+we declared an array & set initial state to ""
+const [error, setError] = userState("");
+
+and added a thing before the button div that has a conditional so it only appears if there's an error message:
+{error && <p>{error}</p>}
+
+@1.30.37 -- then some red color for this error message to let the users know they have done something BAD:
+{error && <p className="text-danger">{error}</p>}
+
+currently getting a compile error on 'userState' not defined, so have to go back and review that input; 
+I think it was supposed to be 'useState' like the other one that is 'useState' -->
+I have a tendancy to type "user" instead of "use" ...
+`useState` is the 'state hook' in react; 
+`userState` is a typo that means nothing in react unless it's used like a variable name; 
+@1.32.43
+test still failing, but he is able to get the red warning to come up if he clicks submit on invalid email.
+Mine doesn't show that red text, but some sort of popup appears from the email input box, maybe it's a built in react
+thing that is a more recent version than the one he used in the video? I need to review up to this point to make sure
+my code is matching his; 
+
+
+
+
+
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
 
@@ -247,7 +386,16 @@ When we update a specific value, we also update the state. Easy.
 
 
 
-  ∴   ↓   →   ←   ↔    ▲    ▼    ►    ◄ 
+
+
+
+
+
+
+
+
+
+  ∴   ↓   →   ←   ↔    ▲    ▼    ►    ◄   👍 
 
 
 

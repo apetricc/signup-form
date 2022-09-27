@@ -44,10 +44,51 @@ test('Should be able to type in an email', () => {
     name: /email/i
   });
   userEvent.type(emailInputElement, "selena@gmail.com");
-  expect(emailInputElement.value).toBe("selena@gmail.com");
-
-
-
-  
+  expect(emailInputElement.value).toBe("selena@gmail.com");  
 });
+
+test('Should be able to type in a password', () => {
+  render(<App />);
+  //this checks that it has role 'password' and also a label 'password'
+  const passwordInputElement = screen.getByLabelText("Password", {
+    name: "password"
+  });
+  userEvent.type(passwordInputElement, "password");
+  expect(passwordInputElement.value).toBe("password");  
+});
+
+test('Should be able to type in confirmed password', () => {
+  render(<App />);
+  //this checks that it has role 'password' and also a label '?'
+  const confirmPasswordInputElement = screen.getByLabelText("Confirm Password", {
+    name: "confirm-password"
+  });
+  userEvent.type(confirmPasswordInputElement, "password");
+  expect(confirmPasswordInputElement.value).toBe("password");  
+});
+
+test("should show email error message on invalid email", () => {
+  render(<App />)
+  // check that the error isn't there on render of virt DOM; can't use "getBy", must use "queryBy"
+  const emailErrorElement = screen.queryByText(/the email you input is invalid/i)
+  const emailInputElement = screen.getByRole("textbox", {
+    name: /email/i
+  });
+  const submitBtnElement = screen.getByRole("button", {
+    name: /submit/i
+  });
+  expect(emailErrorElement).not.toBeInTheDocument();
+  userEvent.type(emailInputElement, "selenagmail.com")
+  userEvent.click(submitBtnElement)
+  //expect(element).toBeInTheDocument is a matcher that looks if the thing is in the virtual DOM
+  expect(emailErrorElement).toBeInTheDocument();
+});
+
+
+
+
+
+
+
+
 
