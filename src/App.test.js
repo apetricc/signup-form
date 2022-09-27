@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import App from './App';
+import userEvent from '@testing-library/user-event'
 
 // default test: 
 // test('renders learn react link', () => {
@@ -35,5 +36,18 @@ test('inputs should be empty intially', () => {
 
 });
 
+//new test block for testing that we can give input to our fields
+test('Should be able to type in an email', () => {
+  render(<App />)
+  //this checks that it has role 'textbox' and also a label 'email'
+  const emailInputElement = screen.getByRole("textbox", {
+    name: /email/i
+  });
+  userEvent.type(emailInputElement, "selena@gmail.com");
+  expect(emailInputElement.value).toBe("selena@gmail.com");
 
+
+
+  
+});
 

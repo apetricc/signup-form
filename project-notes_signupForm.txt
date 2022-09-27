@@ -216,15 +216,30 @@ We can update the first on to look for the string "Password" explicitly, and thi
 
 @1.00.50 moving on to more complicated tests now that we've got our tests to confirm empty starting state;
 
+next we want to test that we can give input for the text input fields that we have now; 
+see what we have with: 
+npm run start             and see what we have at localhost:3000
+We have an email field, a password field, and a confirm password field; 
+∴ we need a new test block to test this completely different thing; 
 
+  we want to simulate a browser interaction with our test,
+  we can do this using @testing-library/user-event
+see: 
+https://testing-library.com/docs/ecosystem-user-event/#typeelement-text-options
 
+We want to use 'type' from documentation: 
+type(element, text, [options])
+Writes text inside an <input> or a <textarea>.
 
+We need to import to use: import userEvent from '@testing-library/user-event'
 
+set up our test, but we will be implementing 2-way binding to our input element;
+we'll be storing the input value inside our 'state' & then the value of the input is also 
+going to be our state ? (not sure I understand this part)
+update a React 'state' when receiving input from user basically, I think.
 
-
-
-
-
+When we update a specific value, we also update the state. Easy. 
+@1.06.24-- test failing with static state of ""
 
 
 

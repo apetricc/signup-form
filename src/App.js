@@ -16,6 +16,7 @@ function App() {
             id="email"
             name="email"
             className='form-control'
+            value=""
           />
         </div>
         <div className="mb-3">
