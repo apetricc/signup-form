@@ -372,6 +372,10 @@ test still failing, but he is able to get the red warning to come up if he click
 Mine doesn't show that red text, but some sort of popup appears from the email input box, maybe it's a built in react
 thing that is a more recent version than the one he used in the video? I need to review up to this point to make sure
 my code is matching his; 
+-it seems like my code is matching, maybe a npm version, or react version thing?
+--> NOPE-- I typo-ed "onClick" as `onclick` ... there's your problem!
+added file "App1.js" which is currently his finished code for this project; 
+
 
 
 
@@ -401,5 +405,6 @@ my code is matching his;
 
 
 
-
+his repository: 
+https://github.com/harblaith7/React-Testing-Library-Udemy-Course
 

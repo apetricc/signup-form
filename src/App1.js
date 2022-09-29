@@ -1,43 +1,39 @@
-import logo from './logo.svg';
-import './App.css';
-import { useState } from "react"
-import validator from 'validator';
+import { useState } from "react";
+import "./App.css";
+import validator from "validator";
 
 function App() {
-  
-  //inside the App, but not the return statement/rendering part
   const [signupInput, setSignInput] = useState({
     email: "",
     password: "",
-    confirmPassword: ""
+    confirmPassword: "",
   });
 
   const [error, setError] = useState("");
-
 
   const handleChange = (e) => {
     setSignInput({
       ...signupInput,
       [e.target.name]: e.target.value,
     });
-  };//handleChange
+  };
 
   const handleClick = (e) => {
     e.preventDefault();
-    alert("you clicked!")
-    if(!validator.isEmail(signupInput.email)) {
-      
-      //throw error
-      return setError("The email you input is invalid");
+    if (!validator.isEmail(signupInput.email)) {
+      return setError("The email you input is invalid.");
+    } else if (signupInput.password.length < 5) {
+      return setError(
+        "The password you entered should contain 5 or more characters."
+      );
+    } else if (signupInput.password !== signupInput.confirmPassword) {
+      return setError("The passwords don't match. Try again.");
     }
-
-  };//handleClick
+  };
 
   return (
-    // add a class name and 'margin y' of 5, aka "my-5"
     <div className="container my-5">
       <form>
-        {/* add margin bottom of 3, aka "mb-3" */}
         <div className="mb-3">
           <label htmlFor="email" className="form-label">
             Email address
@@ -72,13 +68,15 @@ function App() {
             type="password"
             id="confirm-password"
             name="confirmPassword"
-            className='form-control'
+            className="form-control"
             value={signupInput.confirmPassword}
             onChange={handleChange}
           />
         </div>
         {error && <p className="text-danger">{error}</p>}
-        <button type="submit" className="btn btn-primary" onClick={handleClick}>Submit</button>
+        <button type="submit" className="btn btn-primary" onClick={handleClick}>
+          Submit
+        </button>
       </form>
     </div>
   );
