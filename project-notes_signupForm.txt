@@ -376,28 +376,90 @@ my code is matching his;
 --> NOPE-- I typo-ed "onClick" as `onclick` ... there's your problem!
 added file "App1.js" which is currently his finished code for this project; 
 
-
-
-
-
-
-
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+*** We had a test to assert that our red error message would come up onClick && bad email input,
+but it would fail b/c when we intialized the var we were using, the error text didn't exist.  In fact
+we asserted that it wasn't there, and that test passed.  So of course when we tried to test the same var
+and assert that it was present in the (virtual) DOM, the test failed. 
 
+So we just reinitialized a var and asserted that THAT var was in the (virtual) DOM; I wonder if we could just reassign the old var...?
+--NOPE, that doesn't seem to work for whatever reason, I don't get how JS/TS is compiled at all... YET. 
+--------
+Okay, so now we have our text input fields, and testing they start empty, test that our error message isn't there to start, 
+and test that it pops up when someone clicks to submit an invalid email address--pretty good;
 
+1.34.28 -->  assignment time, write 2 tests: handle the errors for the password and confirm password;
 
+only if we enter a proper email && we enter an invalid password;  (invalid password is <5 chars) 
+if an invalid email && invalid password, we give the email error message; 
+if we put in proper email & password & leave the 'confirm' field blank, or not matching, we give another error message;
 
+if less than 5 characters,
+"The password should be contain 5 or more characters."
 
+1.36.13 --> solution to creating these tests.  I don't think we discussed writing this code, but he asked to do the tests first... TDD; 
 
+👍  I think I got it   👍  
 
+The confirm-password was kinda tricky b/c we had to create var/const for each input element and 'getBy' in the different ways we had to use in the 
+first tests.  Luckily we already had to do that, so we just had to do it again, then put in the input as needed, and query the DOM for the error
+messages that should or should not have been there depending what user input was mocked;  
+@1.40
+We are running into an issue where we have a LOT of duplicate code in our tests, but he said we'll come back to that & clean it all up later;
 
+@1.46.40 -- we saw his solution for the 2 password/confirm-password tests & code; 
+one more test to go; 
+we only tested our app through the automated tests, but we should also do some manual testing as well; 
 
+@1.48.57 a test to check that no error message is present if user enters everything correctly; 
+Maybe we can clear the error message too huh? 
 
+@1.53.40 -- we need to apply DRY to our test file; We will refactor our test file to make it more organized & adhere to DRY principle; 
+One thing we're doing in each test is we're rendering the app --> render(<App />);
+We need a fresh render for each test, so how can we avoid explicitly saying we want to render the app each test??
+-We can use a (Jest) hook, a "beforeEach" hook;   (they're all 'Jest hooks')
 
+This will be a function that gets called 'beforeEach' test! 
+@1.56.24 -- so we can see that using hooks can really simplify our code & remove repetitive things from our tests; 
+And talk about other hooks that are out there; 
+There is also: 
+afterEach()   --> runs after each test
+beforeAll()   --> runs * only once * before all the tests get run; It also runs BEFORE any other hook like 'beforeEach'
+afterAll()    --> runs only once AFTER all the tests get run; It will run last in the heirarchy of jest hooks; 
 
+He mentions that we might want to use 'afterEach()' to run some sort of "cleanup" after each test, but I'm not sure what sort of things that would be.
+Maybe I can find an example of this someplace; 
 
+@2.00.17  -- wrapped up the hook examples, how to clean up our test file further?
+Note that in our tests we find the input elements, then we type stuff into the input elements (many times the same elements and same input) 
+What do we do when we have repeating code usually?  --We make a function... and we can do this in our test file; 
 
+@2.13 -- we added a helper method to handle the finding and typing into the input fields, and updated our tests accordingly; 
+(I actually kept the originals and added the flag -UGLY, and the new ones -pretty)
+Challenge--> write another helper method to FIND the submit button & click on the submit button.. pretty similar to our 1st helpter method; 
+👍  I think I got it--all tests passing with new helper method "clickSubmit()"   👍 
+
+@2.13.58 -- his version of the find and click on submit btn
+@2.17.10 -- one more thing we can do to reduce the repeated lines in our test file;
+We were assigning a variable the value of the error message, then asserting if that var was 
+or wasn't in the DOM; 
+We could also just skip the assignment step and assert on the expression to K.I.S.S.
+I updated all my tests to use the screen.getBy assignment statements directly as the search expression
+@2.21.48 -- one last thing to talk about: 
+the 'describe block' 
+all our tests are testing similar components in our app,
+so we can actually group all our tests in the same 'describe' block 
+We can also nest 'describe''s , like we can have parent describe for the App, 
+then an inner 'describe' for error handling etc;
+--> The value of this is that we can then apply Jest Hooks that are targeted.  
+Ex. we could have a 'beforeEach' hook that only runs before each error handling test; 
+or we could make a describe for just the password related tests and do an 'afterEach' 
+in that block to print out a message telling people to change their passwords or whatever 
+
+END OF VIDEO; 
+Can move on to the cat adoption card project using the udemy videos, even though I just love the youtube app so muce more than dumb udemy;=...
+also need to COMMIT THIS TO GITHUB!
 
   ∴   ↓   →   ←   ↔    ▲    ▼    ►    ◄   👍 
 

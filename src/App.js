@@ -24,12 +24,19 @@ function App() {
 
   const handleClick = (e) => {
     e.preventDefault();
-    alert("you clicked!")
+    // alert("you clicked!")
     if(!validator.isEmail(signupInput.email)) {
       
       //throw error
       return setError("The email you input is invalid");
-    }
+    }//if email invalid
+    else if (5 > (signupInput.password.length)) {
+            return setError("The password should be contain 5 or more characters.");
+        }
+    else if (signupInput.confirmPassword !== signupInput.password) {
+        console.log("password and confirmpassword mismatch")
+        return setError("The confirmed password does not match the password you entered dummy");
+    }    
 
   };//handleClick
 
